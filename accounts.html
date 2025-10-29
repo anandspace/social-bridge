@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Connect Account Modal -->
+    <div id="connect-account-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-2xl font-semibold text-gray-900">Connect Social Account</h3>
+                        <button onclick="closeConnectModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Choose a platform to connect your account securely</p>
+                </div>
+                
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl hover:border-pink-300 hover:bg-pink-50 transition-all group">
+                            <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-instagram text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Instagram</h4>
+                            <p class="text-sm text-gray-500 text-center">Business/Creator accounts</p>
+                            <div class="mt-3 text-xs text-gray-400">
+                                <i class="fa-solid fa-check-circle text-green-500 mr-1"></i>Auto-publish
+                                <i class="fa-solid fa-chart-bar text-blue-500 mr-1 ml-2"></i>Analytics
+                            </div>
+                        </button>
+                        
+                        <button class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl hover:border-black hover:bg-gray-50 transition-all group">
+                            <div class="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-tiktok text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">TikTok</h4>
+                            <p class="text-sm text-gray-500 text-center">Business accounts</p>
+                            <div class="mt-3 text-xs text-gray-400">
+                                <i class="fa-solid fa-upload text-orange-500 mr-1"></i>Manual review
+                                <i class="fa-solid fa-chart-bar text-blue-500 mr-1 ml-2"></i>Analytics
+                            </div>
+                        </button>
+                        
+                        <button class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl hover:border-red-300 hover:bg-red-50 transition-all group">
+                            <div class="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-youtube text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">YouTube</h4>
+                            <p class="text-sm text-gray-500 text-center">Channel required</p>
+                            <div class="mt-3 text-xs text-gray-400">
+                                <i class="fa-solid fa-upload text-orange-500 mr-1"></i>Shorts only
+                                <i class="fa-solid fa-chart-bar text-blue-500 mr-1 ml-2"></i>Analytics
+                            </div>
+                        </button>
+                        
+                        <button class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all group">
+                            <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-facebook text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Facebook</h4>
+                            <p class="text-sm text-gray-500 text-center">Pages only</p>
+                            <div class="mt-3 text-xs text-gray-400">
+                                <i class="fa-solid fa-check-circle text-green-500 mr-1"></i>Auto-publish
+                                <i class="fa-solid fa-chart-bar text-blue-500 mr-1 ml-2"></i>Analytics
+                            </div>
+                        </button>
+                        
+                        <button class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all group">
+                            <div class="w-16 h-16 bg-blue-700 rounded-2xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-linkedin text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">LinkedIn</h4>
+                            <p class="text-sm text-gray-500 text-center">Company pages</p>
+                            <div class="mt-3 text-xs text-gray-400">
+                                <i class="fa-solid fa-check-circle text-green-500 mr-1"></i>Auto-publish
+                                <i class="fa-solid fa-chart-bar text-blue-500 mr-1 ml-2"></i>Analytics
+                            </div>
+                        </button>
+                        
+                        <button class="flex flex-col items-center p-6 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all group">
+                            <div class="w-16 h-16 bg-blue-400 rounded-2xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-twitter text-white text-2xl"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Twitter</h4>
+                            <p class="text-sm text-gray-500 text-center">Personal & business</p>
+                            <div class="mt-3 text-xs text-gray-400">
+                                <i class="fa-solid fa-check-circle text-green-500 mr-1"></i>Auto-publish
+                                <i class="fa-solid fa-chart-bar text-blue-500 mr-1 ml-2"></i>Limited
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                    <div class="flex items-center space-x-2 text-sm text-gray-600 mb-3">
+                        <i class="fa-solid fa-shield-halved text-green-600"></i>
+                        <span>We never store your passwords. All tokens are encrypted and revocable.</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-600">
+                        <i class="fa-solid fa-info-circle text-blue-600"></i>
+                        <span>Business/Creator accounts required for most platforms to enable publishing features.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Detail Modal -->
+    <div id="account-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-instagram text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900">@brandstudio</h3>
+                                <p class="text-gray-600">Instagram Business Account</p>
+                            </div>
+                        </div>
+                        <button onclick="closeAccountDetailModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex h-[600px]">
+                    <div class="w-64 bg-gray-50 border-r border-gray-200 p-4">
+                        <nav class="space-y-2">
+                            <button onclick="showTab('overview')" class="tab-btn w-full text-left px-3 py-2 text-sm font-medium text-primary bg-primary bg-opacity-10 rounded-lg">
+                                <i class="fa-solid fa-chart-line mr-2"></i>Overview
+                            </button>
+                            <button onclick="showTab('settings')" class="tab-btn w-full text-left px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">
+                                <i class="fa-solid fa-cog mr-2"></i>Posting Settings
+                            </button>
+                            <button onclick="showTab('limits')" class="tab-btn w-full text-left px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">
+                                <i class="fa-solid fa-gauge mr-2"></i>Limits & Quotas
+                            </button>
+                            <button onclick="showTab('logs')" class="tab-btn w-full text-left px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">
+                                <i class="fa-solid fa-clock-rotate-left mr-2"></i>Activity Logs
+                            </button>
+                            <button onclick="showTab('danger')" class="tab-btn w-full text-left px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg">
+                                <i class="fa-solid fa-triangle-exclamation mr-2"></i>Danger Zone
+                            </button>
+                        </nav>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto">
+                        <div id="overview-tab" class="tab-content p-6">
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <p class="text-sm text-gray-600 mb-1">Account Type</p>
+                                        <p class="font-medium">Instagram Business</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <p class="text-sm text-gray-600 mb-1">Connected</p>
+                                        <p class="font-medium">Oct 15, 2025</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <p class="text-sm text-gray-600 mb-1">Token Expires</p>
+                                        <p class="font-medium text-green-600">In 45 days</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <p class="text-sm text-gray-600 mb-1">Last Sync</p>
+                                        <p class="font-medium">2 minutes ago</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-medium text-gray-900 mb-4">Health Checks</h4>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fa-solid fa-check-circle text-green-500"></i>
+                                                <span class="text-sm">Token Valid</span>
+                                            </div>
+                                            <span class="text-sm text-green-600 font-medium">Active</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fa-solid fa-check-circle text-green-500"></i>
+                                                <span class="text-sm">Required Scopes</span>
+                                            </div>
+                                            <span class="text-sm text-green-600 font-medium">Complete</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fa-solid fa-check-circle text-green-500"></i>
+                                                <span class="text-sm">API Quota</span>
+                                            </div>
+                                            <span class="text-sm text-green-600 font-medium">85% Available</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-2">
+                                                <i class="fa-solid fa-check-circle text-green-500"></i>
+                                                <span class="text-sm">Auto-Publishing</span>
+                                            </div>
+                                            <span class="text-sm text-green-600 font-medium">Enabled</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-3">
+                                    <button class="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                                        <i class="fa-solid fa-refresh mr-2"></i>Test Connection
+                                    </button>
+                                    <button class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 transition-colors">
+                                        <i class="fa-solid fa-sync mr-2"></i>Refresh Permissions
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="settings-tab" class="tab-content p-6 hidden">
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="font-medium text-gray-900 mb-4">Default Posting Behavior</h4>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center space-x-3">
+                                            <input type="radio" name="posting-behavior" class="text-primary" checked>
+                                            <span>Auto-publish when possible</span>
+                                        </label>
+                                        <label class="flex items-center space-x-3">
+                                            <input type="radio" name="posting-behavior" class="text-primary">
+                                            <span>Always require manual approval</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-medium text-gray-900 mb-4">Posting Windows</h4>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-sm font-medium">Timezone</span>
+                                            <select class="text-sm border border-gray-300 rounded px-2 py-1">
+                                                <option>America/New_York</option>
+                                                <option>America/Los_Angeles</option>
+                                                <option>Europe/London</option>
+                                            </select>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-4 mt-4">
+                                            <div>
+                                                <label class="text-sm text-gray-600">Preferred Start Time</label>
+                                                <input type="time" value="09:00" class="w-full mt-1 border border-gray-300 rounded px-3 py-2">
+                                            </div>
+                                            <div>
+                                                <label class="text-sm text-gray-600">Preferred End Time</label>
+                                                <input type="time" value="18:00" class="w-full mt-1 border border-gray-300 rounded px-3 py-2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-medium text-gray-900 mb-4">Content Rules</h4>
+                                    <div class="space-y-3">
+                                        <label class="flex items-center space-x-3">
+                                            <input type="checkbox" class="text-primary" checked>
+                                            <span>Auto-add branded hashtags</span>
+                                        </label>
+                                        <label class="flex items-center space-x-3">
+                                            <input type="checkbox" class="text-primary">
+                                            <span>Prefer 9:16 aspect ratio</span>
+                                        </label>
+                                        <label class="flex items-center space-x-3">
+                                            <input type="checkbox" class="text-primary" checked>
+                                            <span>Auto-generate alt text</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="limits-tab" class="tab-content p-6 hidden">
+                            <div class="space-y-6">
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <i class="fa-solid fa-triangle-exclamation text-yellow-600"></i>
+                                        <h4 class="font-medium text-yellow-800">API Quota Warning</h4>
+                                    </div>
+                                    <p class="text-sm text-yellow-700">You're approaching the daily posting limit. At current queue, you'll hit the cap by Thursday.</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h5 class="font-medium text-gray-900 mb-2">Instagram API Limits</h5>
+                                        <div class="space-y-2 text-sm">
+                                            <div class="flex justify-between">
+                                                <span>Posts per day</span>
+                                                <span class="font-medium">18/25</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span>Stories per day</span>
+                                                <span class="font-medium">12/100</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span>API calls per hour</span>
+                                                <span class="font-medium">156/200</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <h5 class="font-medium text-gray-900 mb-2">Your Plan Limits</h5>
+                                        <div class="space-y-2 text-sm">
+                                            <div class="flex justify-between">
+                                                <span>Scheduled posts</span>
+                                                <span class="font-medium">28/100</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span>Connected accounts</span>
+                                                <span class="font-medium">4/10</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span>AI generations</span>
+                                                <span class="font-medium">156/500</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="logs-tab" class="tab-content p-6 hidden">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="font-medium text-gray-900">Activity History</h4>
+                                    <button class="text-primary text-sm font-medium">Export CSV</button>
+                                </div>
+                                
+                                <div class="space-y-3">
+                                    <div class="flex items-start space-x-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                        <i class="fa-solid fa-check-circle text-green-600 mt-1"></i>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium">Post published successfully</p>
+                                            <p class="text-xs text-gray-600">Product launch announcement</p>
+                                            <p class="text-xs text-gray-500 mt-1">2 minutes ago</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start space-x-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                                        <i class="fa-solid fa-sync text-blue-600 mt-1"></i>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium">Permissions refreshed</p>
+                                            <p class="text-xs text-gray-600">All scopes validated</p>
+                                            <p class="text-xs text-gray-500 mt-1">1 hour ago</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-start space-x-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                                        <i class="fa-solid fa-exclamation-triangle text-orange-600 mt-1"></i>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium">Publishing failed</p>
+                                            <p class="text-xs text-gray-600">Media format not supported</p>
+                                            <p class="text-xs text-gray-500 mt-1">3 hours ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="danger-tab" class="tab-content p-6 hidden">
+                            <div class="space-y-6">
+                                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+                                        <h4 class="font-medium text-red-800">Danger Zone</h4>
+                                    </div>
+                                    <p class="text-sm text-red-700">These actions are irreversible. Please proceed with caution.</p>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <div class="border border-gray-200 rounded-lg p-4">
+                                        <h5 class="font-medium text-gray-900 mb-2">Disable Publishing</h5>
+                                        <p class="text-sm text-gray-600 mb-3">Stop all publishing to this account while keeping analytics and connection active.</p>
+                                        <button class="bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-700">
+                                            Disable Publishing
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="border border-gray-200 rounded-lg p-4">
+                                        <h5 class="font-medium text-gray-900 mb-2">Disconnect Account</h5>
+                                        <p class="text-sm text-gray-600 mb-3">Revoke access token and stop all data syncing. You can reconnect later.</p>
+                                        <button class="bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-700">
+                                            Disconnect Account
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+                                        <h5 class="font-medium text-red-900 mb-2">Remove Account</h5>
+                                        <p class="text-sm text-red-700 mb-3">Permanently delete all data, credentials, and history. This cannot be undone.</p>
+                                        <button class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700">
+                                            Remove Account
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Troubleshooter Modal -->
+    <div id="troubleshooter-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-wrench text-blue-600"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900">Account Troubleshooter</h3>
+                        </div>
+                        <button onclick="closeTroubleshooterModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <i class="fa-solid fa-check-circle text-green-600"></i>
+                            <span class="text-sm">Token validation: Passed</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <i class="fa-solid fa-check-circle text-green-600"></i>
+                            <span class="text-sm">Required scopes: All present</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <i class="fa-solid fa-check-circle text-green-600"></i>
+                            <span class="text-sm">API connectivity: Working</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <i class="fa-solid fa-exclamation-triangle text-yellow-600"></i>
+                            <span class="text-sm">Media format compatibility: Some issues detected</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <h4 class="font-medium text-blue-900 mb-2">Recommendations</h4>
+                        <ul class="text-sm text-blue-800 space-y-1">
+                            <li>• Convert videos to 9:16 aspect ratio for better engagement</li>
+                            <li>• Enable auto-resize for optimal formatting</li>
+                            <li>• Consider scheduling posts during peak hours (9 AM - 6 PM)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="flex space-x-3 mt-6">
+                        <button class="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-medium hover:bg-indigo-700">
+                            <i class="fa-solid fa-sync mr-2"></i>Re-validate All
+                        </button>
+                        <button onclick="closeTroubleshooterModal()" class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 z-40">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-share-nodes text-white text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900">SocialHub</h1>
+            </div>
+        </div>
+        
+        <nav class="p-4 space-y-2">
+            <a href="index.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-line"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="createPost.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span class="font-medium">Create Post</span>
+            </a>
+            <a href="schedule.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-calendar"></i>
+                <span class="font-medium">Schedule</span>
+            </a>
+            <a href="analytics.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span class="font-medium">Analytics</span>
+            </a>
+            <a href="studio.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span class="font-medium">AI Studio</span>
+            </a>
+            <a href="accounts.html" class="flex items-center space-x-3 px-4 py-3 bg-primary text-white rounded-lg">
+                <i class="fa-solid fa-link"></i>
+                <span class="font-medium">Accounts</span>
+            </a>
+        </nav>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+            <div class="flex items-center space-x-3">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Profile" class="w-10 h-10 rounded-full">
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Sarah Wilson</p>
+                    <p class="text-xs text-gray-500">Pro Plan</p>
+                </div>
+                <i class="fa-solid fa-cog text-gray-400 cursor-pointer hover:text-gray-600"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="ml-64">
+        <!-- Header -->
+        <header id="header" class="bg-white shadow-sm border-b border-gray-200 px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900">Connected Accounts</h2>
+                    <p class="text-gray-600 mt-1">Manage your social media accounts and publishing settings</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="openTroubleshooterModal()" class="text-gray-600 hover:text-gray-900 px-4 py-2 border border-gray-300 rounded-lg font-medium">
+                        <i class="fa-solid fa-wrench mr-2"></i>Troubleshooter
+                    </button>
+                    <button onclick="openConnectModal()" class="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                        <i class="fa-solid fa-plus mr-2"></i>Connect Account
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Account Health Banner -->
+        <div id="health-banner" class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mx-8 mt-6 rounded-r-lg">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-exclamation-triangle text-yellow-600"></i>
+                <div>
+                    <p class="font-medium text-yellow-800">Action Required</p>
+                    <p class="text-sm text-yellow-700">2 accounts need attention: LinkedIn token expires in 3 days, TikTok needs scope refresh.</p>
+                </div>
+                <button class="ml-auto text-yellow-600 hover:text-yellow-800">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters and Search -->
+        <div id="filters-section" class="p-8 pb-0">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Search accounts..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-64 focus:ring-2 focus:ring-primary focus:border-primary">
+                    </div>
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 bg-white">
+                        <option value="">All Platforms</option>
+                        <option value="instagram">Instagram</option>
+                        <option value="facebook">Facebook</option>
+                        <option value="twitter">Twitter</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="youtube">YouTube</option>
+                    </select>
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 bg-white">
+                        <option value="">All Statuses</option>
+                        <option value="healthy">Healthy</option>
+                        <option value="expiring">Expiring Soon</option>
+                        <option value="action-required">Action Required</option>
+                        <option value="disconnected">Disconnected</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="p-2 text-gray-400 hover:text-gray-600 border border-gray-300 rounded-lg">
+                        <i class="fa-solid fa-th-large"></i>
+                    </button>
+                    <button class="p-2 text-gray-600 bg-gray-100 border border-gray-300 rounded-lg">
+                        <i class="fa-solid fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accounts Grid -->
+        <div id="accounts-section" class="p-8 pt-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Instagram Account -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-instagram text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">@brandstudio</h3>
+                                <p class="text-sm text-gray-500">Instagram Business</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                            <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">Healthy</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Posts (7d)</p>
+                            <p class="font-semibold text-gray-900">12</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Avg ER</p>
+                            <p class="font-semibold text-gray-900">8.2%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <i class="fa-solid fa-clock text-blue-600"></i>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-blue-900">Next scheduled post</p>
+                            <p class="text-xs text-blue-700">Today at 3:00 PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-check-circle text-green-500"></i>
+                            <span class="text-gray-600">Auto-publish</span>
+                        </div>
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-chart-bar text-blue-500"></i>
+                            <span class="text-gray-600">Analytics</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button onclick="openAccountDetailModal()" class="flex-1 bg-primary text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-indigo-700">
+                            Manage
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Facebook Account -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-facebook text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Brand Studio</h3>
+                                <p class="text-sm text-gray-500">Facebook Page</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                            <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">Healthy</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Posts (7d)</p>
+                            <p class="font-semibold text-gray-900">8</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Reach</p>
+                            <p class="font-semibold text-gray-900">2.1K</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4 p-3 bg-gray-100 border border-gray-200 rounded-lg">
+                        <i class="fa-solid fa-calendar-xmark text-gray-500"></i>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-600">No scheduled posts</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-check-circle text-green-500"></i>
+                            <span class="text-gray-600">Auto-publish</span>
+                        </div>
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-chart-bar text-blue-500"></i>
+                            <span class="text-gray-600">Analytics</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-primary text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-indigo-700">
+                            Manage
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Twitter Account -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-blue-400 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-twitter text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">@brandstudio</h3>
+                                <p class="text-sm text-gray-500">Twitter Business</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                            <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">Healthy</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Tweets (7d)</p>
+                            <p class="font-semibold text-gray-900">24</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Engagement</p>
+                            <p class="font-semibold text-gray-900">5.4%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <i class="fa-solid fa-clock text-blue-600"></i>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-blue-900">Next scheduled tweet</p>
+                            <p class="text-xs text-blue-700">Tomorrow at 10:00 AM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-check-circle text-green-500"></i>
+                            <span class="text-gray-600">Auto-publish</span>
+                        </div>
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-chart-bar text-gray-400"></i>
+                            <span class="text-gray-600">Limited analytics</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-primary text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-indigo-700">
+                            Manage
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LinkedIn Account - Action Required -->
+                <div class="bg-white border-2 border-yellow-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-blue-700 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-linkedin text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Brand Studio</h3>
+                                <p class="text-sm text-gray-500">LinkedIn Company</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></span>
+                            <span class="text-xs font-medium text-yellow-700 bg-yellow-100 px-2 py-1 rounded-full">Expiring Soon</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-exclamation-triangle text-yellow-600"></i>
+                            <div>
+                                <p class="text-sm font-medium text-yellow-800">Token expires in 3 days</p>
+                                <p class="text-xs text-yellow-700">Reconnect to continue publishing</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Posts (7d)</p>
+                            <p class="font-semibold text-gray-900">6</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Impressions</p>
+                            <p class="font-semibold text-gray-900">1.8K</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-yellow-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-yellow-700">
+                            Reconnect
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TikTok Account - Action Required -->
+                <div class="bg-white border-2 border-orange-300 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-tiktok text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">@brandstudio</h3>
+                                <p class="text-sm text-gray-500">TikTok Business</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></span>
+                            <span class="text-xs font-medium text-orange-700 bg-orange-100 px-2 py-1 rounded-full">Action Required</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-exclamation-triangle text-orange-600"></i>
+                            <div>
+                                <p class="text-sm font-medium text-orange-800">Missing required scopes</p>
+                                <p class="text-xs text-orange-700">Refresh permissions to enable publishing</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Videos (7d)</p>
+                            <p class="font-semibold text-gray-900">3</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Views</p>
+                            <p class="font-semibold text-gray-900">12.5K</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-upload text-orange-500"></i>
+                            <span class="text-gray-600">Manual review</span>
+                        </div>
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-chart-bar text-blue-500"></i>
+                            <span class="text-gray-600">Analytics</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-orange-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-orange-700">
+                            Fix Permissions
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- YouTube Account -->
+                <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-youtube text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Brand Studio</h3>
+                                <p class="text-sm text-gray-500">YouTube Channel</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                            <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">Healthy</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Shorts (7d)</p>
+                            <p class="font-semibold text-gray-900">4</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <p class="text-xs text-gray-600 mb-1">Views</p>
+                            <p class="font-semibold text-gray-900">8.9K</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <i class="fa-solid fa-clock text-blue-600"></i>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-blue-900">Next scheduled short</p>
+                            <p class="text-xs text-blue-700">Friday at 2:00 PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-upload text-orange-500"></i>
+                            <span class="text-gray-600">Shorts only</span>
+                        </div>
+                        <div class="flex items-center space-x-1 text-xs">
+                            <i class="fa-solid fa-chart-bar text-blue-500"></i>
+                            <span class="text-gray-600">Analytics</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-primary text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-indigo-700">
+                            Manage
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State (Hidden when accounts exist) -->
+        <div id="empty-state" class="p-8 text-center hidden">
+            <div class="max-w-md mx-auto">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-link text-3xl text-gray-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">No accounts connected yet</h3>
+                <p class="text-gray-600 mb-6">Connect your social media accounts to start publishing and managing your content across multiple platforms.</p>
+                
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <button class="flex items-center justify-center space-x-2 p-3 border-2 border-gray-200 rounded-lg hover:border-pink-300 hover:bg-pink-50 transition-all">
+                        <i class="fa-brands fa-instagram text-pink-500"></i>
+                        <span class="text-sm font-medium">Connect Instagram</span>
+                    </button>
+                    <button class="flex items-center justify-center space-x-2 p-3 border-2 border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-all">
+                        <i class="fa-brands fa-tiktok text-black"></i>
+                        <span class="text-sm font-medium">Connect TikTok</span>
+                    </button>
+                </div>
+                
+                <div class="text-left bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 class="font-medium text-blue-900 mb-2">Why business accounts?</h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Enable automated publishing</li>
+                        <li>• Access detailed analytics</li>
+                        <li>• Schedule posts in advance</li>
+                        <li>• Manage multiple accounts efficiently</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Actions Bar (Hidden initially) -->
+        <div id="bulk-actions" class="fixed bottom-0 left-64 right-0 bg-white border-t border-gray-200 shadow-lg p-4 hidden">
+            <div class="flex items-center justify-between max-w-7xl mx-auto">
+                <div class="flex items-center space-x-3">
+                    <span class="text-sm text-gray-600">3 accounts selected</span>
+                    <button class="text-sm text-gray-600 hover:text-gray-800">Select all</button>
+                    <button class="text-sm text-gray-600 hover:text-gray-800">Clear selection</button>
+                </div>
+                <div class="flex space-x-2">
+                    <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700">
+                        Enable Publishing
+                    </button>
+                    <button class="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700">
+                        Disable Publishing
+                    </button>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700">
+                        Disconnect
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openConnectModal() {
+            document.getElementById('connect-account-modal').classList.remove('hidden');
+        }
+
+        function closeConnectModal() {
+            document.getElementById('connect-account-modal').classList.add('hidden');
+        }
+
+        function openAccountDetailModal() {
+            document.getElementById('account-detail-modal').classList.remove('hidden');
+        }
+
+        function closeAccountDetailModal() {
+            document.getElementById('account-detail-modal').classList.add('hidden');
+        }
+
+        function openTroubleshooterModal() {
+            document.getElementById('troubleshooter-modal').classList.remove('hidden');
+        }
+
+        function closeTroubleshooterModal() {
+            document.getElementById('troubleshooter-modal').classList.add('hidden');
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-primary', 'bg-primary', 'bg-opacity-10');
+                btn.classList.add('text-gray-600');
+            });
+            
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            event.target.classList.remove('text-gray-600');
+            event.target.classList.add('text-primary', 'bg-primary', 'bg-opacity-10');
+        }
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(event) {
+            const modals = ['connect-account-modal', 'account-detail-modal', 'troubleshooter-modal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

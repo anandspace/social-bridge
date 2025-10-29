@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 z-50">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-share-nodes text-white text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900">SocialHub</h1>
+            </div>
+        </div>
+        
+        <nav class="p-4 space-y-2">
+            <a href="index.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-line"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="createPost.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span class="font-medium">Create Post</span>
+            </a>
+            <a href="schedule.html" class="flex items-center space-x-3 px-4 py-3 bg-primary text-white rounded-lg">
+                <i class="fa-solid fa-calendar"></i>
+                <span class="font-medium">Schedule</span>
+            </a>
+            <a href="analytics.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span class="font-medium">Analytics</span>
+            </a>
+            <a href="studio.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span class="font-medium">AI Studio</span>
+            </a>
+            <a href="accounts.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-link"></i>
+                <span class="font-medium">Accounts</span>
+            </a>
+        </nav>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+            <div class="flex items-center space-x-3">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Profile" class="w-10 h-10 rounded-full">
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Sarah Wilson</p>
+                    <p class="text-xs text-gray-500">Pro Plan</p>
+                </div>
+                <i class="fa-solid fa-cog text-gray-400 cursor-pointer hover:text-gray-600"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="ml-64">
+        <!-- Header -->
+        <header id="header" class="bg-white shadow-sm border-b border-gray-200 px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Scheduled Posts</h2>
+                    <p class="text-gray-600">Manage and view all your scheduled social media posts.</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex bg-gray-100 rounded-lg p-1" id="view-toggle">
+                        <button id="calendar-view-btn" class="px-4 py-2 text-sm font-medium bg-white text-primary rounded-md shadow-sm transition-all">
+                            <i class="fa-solid fa-calendar mr-2"></i>Calendar
+                        </button>
+                        <button id="list-view-btn" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-md transition-all">
+                            <i class="fa-solid fa-list mr-2"></i>List
+                        </button>
+                    </div>
+                    <button class="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                        <i class="fa-solid fa-plus mr-2"></i>Schedule Post
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Analytics Overview -->
+        <div id="analytics-overview" class="p-8 pb-4">
+            <div class="grid grid-cols-5 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Total Scheduled</p>
+                            <p class="text-3xl font-bold text-gray-900">47</p>
+                            <p class="text-blue-600 text-sm mt-1">
+                                <i class="fa-solid fa-calendar-plus"></i> This month
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-clock text-blue-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Published Today</p>
+                            <p class="text-3xl font-bold text-gray-900">8</p>
+                            <p class="text-green-600 text-sm mt-1">
+                                <i class="fa-solid fa-check-circle"></i> Successful
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-paper-plane text-green-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Pending</p>
+                            <p class="text-3xl font-bold text-gray-900">23</p>
+                            <p class="text-orange-600 text-sm mt-1">
+                                <i class="fa-solid fa-hourglass-half"></i> Awaiting
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-hourglass text-orange-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Failed Posts</p>
+                            <p class="text-3xl font-bold text-gray-900">2</p>
+                            <p class="text-red-600 text-sm mt-1">
+                                <i class="fa-solid fa-exclamation-triangle"></i> Needs attention
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-times-circle text-red-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm">Best Time</p>
+                            <p class="text-3xl font-bold text-gray-900">2PM</p>
+                            <p class="text-purple-600 text-sm mt-1">
+                                <i class="fa-solid fa-star"></i> Peak engagement
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-chart-line text-purple-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div id="content-area" class="px-8 pb-8">
+            <!-- Calendar View -->
+            <div id="calendar-view" class="grid grid-cols-4 gap-8">
+                <!-- Calendar -->
+                <div class="col-span-3">
+                    <div id="calendar-section" class="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <button id="prev-month" class="p-2 hover:bg-gray-100 rounded-lg">
+                                        <i class="fa-solid fa-chevron-left text-gray-600"></i>
+                                    </button>
+                                    <h3 class="text-xl font-semibold text-gray-900" id="current-month">October 2025</h3>
+                                    <button id="next-month" class="p-2 hover:bg-gray-100 rounded-lg">
+                                        <i class="fa-solid fa-chevron-right text-gray-600"></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="flex items-center space-x-2 text-sm">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                        <span class="text-gray-600">Instagram</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 text-sm">
+                                        <div class="w-3 h-3 bg-pink-500 rounded-full"></div>
+                                        <span class="text-gray-600">Facebook</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 text-sm">
+                                        <div class="w-3 h-3 bg-cyan-500 rounded-full"></div>
+                                        <span class="text-gray-600">Twitter</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 text-sm">
+                                        <div class="w-3 h-3 bg-blue-700 rounded-full"></div>
+                                        <span class="text-gray-600">LinkedIn</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <!-- Calendar Grid -->
+                            <div class="grid grid-cols-7 gap-1 mb-4">
+                                <div class="p-3 text-center text-sm font-medium text-gray-500">Sun</div>
+                                <div class="p-3 text-center text-sm font-medium text-gray-500">Mon</div>
+                                <div class="p-3 text-center text-sm font-medium text-gray-500">Tue</div>
+                                <div class="p-3 text-center text-sm font-medium text-gray-500">Wed</div>
+                                <div class="p-3 text-center text-sm font-medium text-gray-500">Thu</div>
+                                <div class="p-3 text-center text-sm font-medium text-gray-500">Fri</div>
+                                <div class="p-3 text-center text-sm font-medium text-gray-500">Sat</div>
+                            </div>
+                            
+                            <div class="grid grid-cols-7 gap-1" id="calendar-grid">
+                                <!-- Calendar days will be generated here -->
+                                <div class="p-2 h-24 border border-gray-100 text-gray-400">
+                                    <span class="text-sm">29</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100 text-gray-400">
+                                    <span class="text-sm">30</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">1</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">2</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">3</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-cyan-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">4</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                        <div class="w-full h-1 bg-blue-700 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">5</span>
+                                </div>
+                                
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">6</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">7</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">8</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                        <div class="w-full h-1 bg-cyan-500 rounded"></div>
+                                        <div class="w-full h-1 bg-blue-700 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">9</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">10</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">11</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">12</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-cyan-500 rounded"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">13</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">14</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                        <div class="w-full h-1 bg-blue-700 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">15</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-cyan-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">16</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">17</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">18</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">19</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-700 rounded"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">20</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">21</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                        <div class="w-full h-1 bg-cyan-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">22</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">23</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">24</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                        <div class="w-full h-1 bg-cyan-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">25</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">26</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-700 rounded"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">27</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100 bg-blue-50 border-blue-200">
+                                    <span class="text-sm font-semibold text-blue-600">28</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                    </div>
+                                    <div class="text-xs text-blue-600 mt-1">Today</div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">29</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-cyan-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">30</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-blue-500 rounded"></div>
+                                        <div class="w-full h-1 bg-blue-700 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100">
+                                    <span class="text-sm font-medium">31</span>
+                                    <div class="mt-1 space-y-1">
+                                        <div class="w-full h-1 bg-pink-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100 text-gray-400">
+                                    <span class="text-sm">1</span>
+                                </div>
+                                <div class="p-2 h-24 border border-gray-100 text-gray-400">
+                                    <span class="text-sm">2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Today's Posts Sidebar -->
+                <div class="col-span-1">
+                    <div id="todays-posts" class="bg-white rounded-xl shadow-sm border border-gray-200 sticky top-8">
+                        <div class="p-6 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900">Today's Posts</h3>
+                            <p class="text-sm text-gray-600 mt-1">October 28, 2025</p>
+                        </div>
+                        
+                        <div class="p-4 space-y-4 max-h-96 overflow-y-auto">
+                            <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fa-brands fa-instagram text-pink-500"></i>
+                                        <span class="text-sm font-medium text-gray-900">Instagram</span>
+                                    </div>
+                                    <span class="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full">9:00 AM</span>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-2">Morning motivation post with team photo</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Status: Scheduled</span>
+                                    <div class="flex space-x-2">
+                                        <button class="text-blue-600 hover:text-blue-800 text-xs">
+                                            <i class="fa-solid fa-edit"></i>
+                                        </button>
+                                        <button class="text-red-600 hover:text-red-800 text-xs">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 bg-pink-50 border border-pink-200 rounded-lg">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fa-brands fa-facebook text-blue-600"></i>
+                                        <span class="text-sm font-medium text-gray-900">Facebook</span>
+                                    </div>
+                                    <span class="text-xs text-pink-600 bg-pink-100 px-2 py-1 rounded-full">2:00 PM</span>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-2">Product showcase video with customer testimonials</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Status: Scheduled</span>
+                                    <div class="flex space-x-2">
+                                        <button class="text-blue-600 hover:text-blue-800 text-xs">
+                                            <i class="fa-solid fa-edit"></i>
+                                        </button>
+                                        <button class="text-red-600 hover:text-red-800 text-xs">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                <div class="flex items-start justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fa-brands fa-instagram text-pink-500"></i>
+                                        <span class="text-sm font-medium text-gray-900">Instagram</span>
+                                    </div>
+                                    <span class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">Published</span>
+                                </div>
+                                <p class="text-sm text-gray-700 mb-2">Behind-the-scenes content from office</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500">Published: 7:00 AM</span>
+                                    <div class="flex space-x-2">
+                                        <button class="text-green-600 hover:text-green-800 text-xs">
+                                            <i class="fa-solid fa-chart-bar"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List View (Hidden by default) -->
+            <div id="list-view" class="hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-900">All Scheduled Posts</h3>
+                            <div class="flex items-center space-x-4">
+                                <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                    <option>All Platforms</option>
+                                    <option>Instagram</option>
+                                    <option>Facebook</option>
+                                    <option>Twitter</option>
+                                    <option>LinkedIn</option>
+                                </select>
+                                <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                    <option>All Status</option>
+                                    <option>Scheduled</option>
+                                    <option>Published</option>
+                                    <option>Failed</option>
+                                    <option>Draft</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Post</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Platform</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Scheduled Time</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                                                <i class="fa-solid fa-image text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-900">Product Launch Announcement</p>
+                                                <p class="text-sm text-gray-600">Exciting news! Our new product line is finally here...</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fa-brands fa-instagram text-pink-500"></i>
+                                            <span class="text-sm text-gray-900">Instagram</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">Oct 29, 2025</div>
+                                        <div class="text-sm text-gray-500">9:00 AM</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Scheduled</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fa-solid fa-edit"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-800">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center">
+                                                <i class="fa-solid fa-video text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-900">Customer Success Story</p>
+                                                <p class="text-sm text-gray-600">Watch how our client achieved 300% growth...</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fa-brands fa-facebook text-blue-600"></i>
+                                            <span class="text-sm text-gray-900">Facebook</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">Oct 28, 2025</div>
+                                        <div class="text-sm text-gray-500">2:00 PM</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Published</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <button class="text-green-600 hover:text-green-800">
+                                                <i class="fa-solid fa-chart-bar"></i>
+                                            </button>
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fa-solid fa-external-link"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                                                <i class="fa-solid fa-quote-left text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-900">Motivational Monday Quote</p>
+                                                <p class="text-sm text-gray-600">"Success is not final, failure is not fatal..."</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fa-brands fa-twitter text-cyan-500"></i>
+                                            <span class="text-sm text-gray-900">Twitter</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">Oct 30, 2025</div>
+                                        <div class="text-sm text-gray-500">8:00 AM</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Scheduled</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fa-solid fa-edit"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-800">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 rounded-lg flex items-center justify-center">
+                                                <i class="fa-solid fa-exclamation-triangle text-white"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-900">Weekend Sale Announcement</p>
+                                                <p class="text-sm text-gray-600">Don't miss our biggest sale of the year...</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fa-brands fa-linkedin text-blue-700"></i>
+                                            <span class="text-sm text-gray-900">LinkedIn</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">Oct 27, 2025</div>
+                                        <div class="text-sm text-gray-500">10:00 AM</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Failed</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center space-x-3">
+                                            <button class="text-blue-600 hover:text-blue-800">
+                                                <i class="fa-solid fa-redo"></i>
+                                            </button>
+                                            <button class="text-green-600 hover:text-green-800">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-800">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="px-6 py-4 border-t border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm text-gray-600">Showing 1-4 of 47 posts</p>
+                            <div class="flex items-center space-x-2">
+                                <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">Previous</button>
+                                <button class="px-3 py-2 text-sm bg-primary text-white rounded-lg">1</button>
+                                <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">2</button>
+                                <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">3</button>
+                                <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Section -->
+        <div id="quick-actions" class="px-8 pb-8">
+            <div class="bg-gradient-to-r from-primary to-secondary p-6 rounded-xl text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Quick Actions</h3>
+                        <p class="text-indigo-100">Streamline your social media workflow</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-lg font-medium transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Schedule Post</span>
+                        </button>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-lg font-medium transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>AI Generate</span>
+                        </button>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-lg font-medium transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <span>Bulk Schedule</span>
+                        </button>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-lg font-medium transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Export</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // View Toggle Functionality
+        document.getElementById('calendar-view-btn').addEventListener('click', function() {
+            document.getElementById('calendar-view').classList.remove('hidden');
+            document.getElementById('list-view').classList.add('hidden');
+            
+            this.classList.add('bg-white', 'text-primary', 'shadow-sm');
+            this.classList.remove('text-gray-600');
+            
+            document.getElementById('list-view-btn').classList.remove('bg-white', 'text-primary', 'shadow-sm');
+            document.getElementById('list-view-btn').classList.add('text-gray-600');
+        });
+
+        document.getElementById('list-view-btn').addEventListener('click', function() {
+            document.getElementById('list-view').classList.remove('hidden');
+            document.getElementById('calendar-view').classList.add('hidden');
+            
+            this.classList.add('bg-white', 'text-primary', 'shadow-sm');
+            this.classList.remove('text-gray-600');
+            
+            document.getElementById('calendar-view-btn').classList.remove('bg-white', 'text-primary', 'shadow-sm');
+            document.getElementById('calendar-view-btn').classList.add('text-gray-600');
+        });
+
+        // Platform Performance Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            Highcharts.chart('platform-performance-chart', {
+                credits: { enabled: false },
+                chart: {
+                    type: 'column',
+                    backgroundColor: 'transparent'
+                },
+                title: {
+                    text: null
+                },
+                xAxis: {
+                    categories: ['Instagram', 'Facebook', 'Twitter', 'LinkedIn', 'TikTok'],
+                    crosshair: true
+                },
+                yAxis: {
+                    title: {
+                        text: 'Posts'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        borderRadius: 4
+                    }
+                },
+                series: [{
+                    name: 'Scheduled',
+                    data: [15, 12, 8, 6, 4],
+                    color: '#6366f1'
+                }, {
+                    name: 'Published',
+                    data: [18, 14, 10, 8, 5],
+                    color: '#10b981'
+                }, {
+                    name: 'Failed',
+                    data: [1, 0, 1, 0, 0],
+                    color: '#ef4444'
+                }]
+            });
+        });
+    </script>
+</body>
+</html>

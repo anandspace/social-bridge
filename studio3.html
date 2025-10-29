@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 z-40">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-share-nodes text-white text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900">SocialHub</h1>
+            </div>
+        </div>
+        
+        <nav class="p-4 space-y-2">
+            <a href="index.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-line"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="createPost.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span class="font-medium">Create Post</span>
+            </a>
+            <a href="schedule.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-calendar"></i>
+                <span class="font-medium">Schedule</span>
+            </a>
+            <a href="analytics.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span class="font-medium">Analytics</span>
+            </a>
+            <a href="studio.html" class="flex items-center space-x-3 px-4 py-3 bg-primary text-white rounded-lg">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span class="font-medium">AI Studio</span>
+            </a>
+            <a href="accounts.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-link"></i>
+                <span class="font-medium">Accounts</span>
+            </a>
+        </nav>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+            <div class="flex items-center space-x-3">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Profile" class="w-10 h-10 rounded-full">
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Sarah Wilson</p>
+                    <p class="text-xs text-gray-500">Pro Plan</p>
+                </div>
+                <i class="fa-solid fa-cog text-gray-400 cursor-pointer hover:text-gray-600"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="ml-64">
+        <!-- Header -->
+        <header id="header" class="bg-white shadow-sm border-b border-gray-200 px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900">AI Studio</h2>
+                    <p class="text-gray-600 mt-1">Create engaging captions, images, and videos with AI assistance</p>
+                </div>
+                
+                <!-- Header Controls -->
+                <div class="flex items-center space-x-6">
+                    <!-- Mode Selector -->
+                    <div class="flex items-center space-x-2 bg-gray-100 p-1 rounded-lg">
+                        <button id="caption-mode" class="px-4 py-2 text-sm font-medium bg-primary text-white rounded-md transition-all">Caption</button>
+                        <button id="image-mode" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-all">Image</button>
+                        <button id="video-mode" class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-all">Video</button>
+                    </div>
+                    
+                    <!-- Platform Picker -->
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-600 font-medium">Platforms:</span>
+                        <div class="flex space-x-2">
+                            <button class="platform-btn w-10 h-10 bg-pink-500 rounded-lg flex items-center justify-center text-white hover:scale-110 transition-transform" data-platform="instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </button>
+                            <button class="platform-btn w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all" data-platform="facebook">
+                                <i class="fa-brands fa-facebook"></i>
+                            </button>
+                            <button class="platform-btn w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 hover:bg-blue-400 hover:text-white transition-all" data-platform="twitter">
+                                <i class="fa-brands fa-twitter"></i>
+                            </button>
+                            <button class="platform-btn w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 hover:bg-red-600 hover:text-white transition-all" data-platform="youtube">
+                                <i class="fa-brands fa-youtube"></i>
+                            </button>
+                            <button class="platform-btn w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 hover:bg-black hover:text-white transition-all" data-platform="tiktok">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Brand Voice Dropdown -->
+                    <select id="brand-voice" class="bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option>Professional & Friendly</option>
+                        <option>Casual & Fun</option>
+                        <option>Authoritative</option>
+                        <option>Inspirational</option>
+                        <option>Educational</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Studio Interface -->
+        <div class="flex">
+            <!-- Left Panel - Brief Configuration -->
+            <div id="left-panel" class="w-80 bg-white shadow-lg border-r border-gray-200 h-[calc(100vh-140px)] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Brief</h3>
+                        <button class="text-primary hover:text-indigo-700 text-sm font-medium">
+                            <i class="fa-solid fa-save mr-1"></i>Save Template
+                        </button>
+                    </div>
+                    
+                    <!-- Goal Presets -->
+                    <div id="goal-section" class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Goal</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button class="goal-btn px-3 py-2 text-sm bg-primary text-white rounded-lg font-medium transition-all">Engage</button>
+                            <button class="goal-btn px-3 py-2 text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition-all">Educate</button>
+                            <button class="goal-btn px-3 py-2 text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition-all">Promote</button>
+                            <button class="goal-btn px-3 py-2 text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition-all">Launch</button>
+                            <button class="goal-btn px-3 py-2 text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition-all col-span-2">Announcement</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Audience Selector -->
+                    <div id="audience-section" class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Target Audience</label>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="audience-chip px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-200">Young Professionals</span>
+                            <span class="audience-chip px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700">Entrepreneurs</span>
+                            <span class="audience-chip px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700">Small Business</span>
+                            <span class="audience-chip px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700">Tech Enthusiasts</span>
+                            <button class="px-3 py-1 border border-dashed border-gray-300 text-gray-500 text-sm rounded-full hover:border-gray-400 transition-all">
+                                <i class="fa-solid fa-plus mr-1"></i>Add Custom
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Topic/Idea Input -->
+                    <div id="topic-section" class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Topic & Content Idea</label>
+                        <div class="space-y-3">
+                            <textarea id="topic-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none" rows="3" placeholder="Describe your content idea or topic...">Behind-the-scenes look at our new product development process</textarea>
+                            
+                            <div class="flex space-x-2">
+                                <input type="url" class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm" placeholder="Optional URL to scrape">
+                                <button class="px-4 py-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all">
+                                    <i class="fa-solid fa-link"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 border border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-all cursor-pointer">
+                                <div class="flex items-center space-x-2 text-gray-500">
+                                    <i class="fa-solid fa-upload"></i>
+                                    <span class="text-sm">Upload existing media</span>
+                                </div>
+                                <i class="fa-solid fa-plus text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Length Slider -->
+                    <div id="length-section" class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Content Length</label>
+                        <div class="relative">
+                            <input type="range" id="length-slider" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" min="1" max="3" value="2">
+                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>Short</span>
+                                <span class="font-medium text-primary">Medium</span>
+                                <span>Long</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hashtag Style -->
+                    <div id="hashtag-section" class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Hashtag Strategy</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button class="hashtag-btn px-3 py-2 text-sm bg-primary text-white rounded-lg font-medium transition-all">Niche</button>
+                            <button class="hashtag-btn px-3 py-2 text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition-all">Broad</button>
+                            <button class="hashtag-btn px-3 py-2 text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition-all">Mixed</button>
+                            <button class="hashtag-btn px-3 py-2 text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-lg font-medium transition-all">None</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Settings -->
+                    <div id="advanced-section" class="mb-6">
+                        <button id="advanced-toggle" class="flex items-center justify-between w-full text-left">
+                            <label class="text-sm font-medium text-gray-700">Advanced Settings</label>
+                            <i class="fa-solid fa-chevron-down text-gray-400 transition-transform"></i>
+                        </button>
+                        
+                        <div id="advanced-content" class="mt-3 space-y-4 hidden">
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-2">Words to avoid</label>
+                                <textarea class="w-full p-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none" rows="2" placeholder="e.g., spam, sale, buy now..."></textarea>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" checked>
+                                    <span class="text-sm text-gray-600">Family-friendly content</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
+                                    <span class="text-sm text-gray-600">Include trending hashtags</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" checked>
+                                    <span class="text-sm text-gray-600">Auto-optimize for engagement</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center Panel - Composer -->
+            <div id="center-panel" class="flex-1 bg-white h-[calc(100vh-140px)] overflow-y-auto">
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Composer</h3>
+                        <div class="flex items-center space-x-3">
+                            <div class="text-sm text-gray-500">
+                                <i class="fa-solid fa-clock mr-1"></i>
+                                Auto-saved 2 min ago
+                            </div>
+                            <button class="text-primary hover:text-indigo-700 text-sm font-medium">
+                                <i class="fa-solid fa-history mr-1"></i>Version History
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Caption Composer -->
+                    <div id="caption-composer" class="space-y-6">
+                        <!-- Rich Text Editor -->
+                        <div class="border border-gray-300 rounded-xl overflow-hidden shadow-sm">
+                            <div class="bg-gray-50 border-b border-gray-300 p-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex items-center space-x-2">
+                                            <button class="p-2 hover:bg-gray-200 rounded transition-all" title="Bold">
+                                                <i class="fa-solid fa-bold"></i>
+                                            </button>
+                                            <button class="p-2 hover:bg-gray-200 rounded transition-all" title="Italic">
+                                                <i class="fa-solid fa-italic"></i>
+                                            </button>
+                                            <button class="p-2 hover:bg-gray-200 rounded transition-all" title="Underline">
+                                                <i class="fa-solid fa-underline"></i>
+                                            </button>
+                                        </div>
+                                        <div class="w-px h-6 bg-gray-300"></div>
+                                        <button class="p-2 hover:bg-gray-200 rounded transition-all" title="Add Emoji">
+                                            <i class="fa-solid fa-face-smile"></i>
+                                        </button>
+                                        <button class="p-2 hover:bg-gray-200 rounded transition-all" title="Add Hashtag">
+                                            <i class="fa-solid fa-hashtag"></i>
+                                        </button>
+                                        <button class="p-2 hover:bg-gray-200 rounded transition-all" title="Add Mention">
+                                            <i class="fa-solid fa-at"></i>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-sm text-gray-500">
+                                            <span id="char-count" class="font-medium">0</span> / <span class="text-xs">2200</span>
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            <i class="fa-brands fa-instagram text-pink-500 mr-1"></i>
+                                            <span class="text-xs">Instagram optimized</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <textarea id="main-textarea" class="w-full p-4 border-0 focus:ring-0 resize-none text-gray-900 placeholder-gray-400" rows="12" placeholder="Start writing your caption here...">🎬 Behind the scenes magic! ✨
+
+Ever wondered how we bring our ideas to life? Here's a sneak peek into our creative process - from concept to creation.
+
+Our team puts heart and soul into every project, and seeing it all come together is pure magic! 🚀
+
+What behind-the-scenes content would you love to see next?
+
+#BehindTheScenes #CreativeProcess #TeamWork #Innovation #ProductDevelopment</textarea>
+                        </div>
+                        
+                        <!-- AI Suggestions -->
+                        <div id="ai-suggestions" class="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-sm font-medium text-purple-900 flex items-center">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-purple-600 mr-2"></i>
+                                    AI Suggestions
+                                </h4>
+                                <button class="text-purple-600 hover:text-purple-800 text-sm font-medium">
+                                    Refresh
+                                </button>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-white p-3 rounded-lg border border-purple-100 hover:border-purple-300 cursor-pointer transition-all">
+                                    <p class="text-sm text-gray-800">Add a compelling hook: "You won't believe what happens next..."</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-purple-100 hover:border-purple-300 cursor-pointer transition-all">
+                                    <p class="text-sm text-gray-800">Include trending hashtag: #MondayMotivation</p>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-purple-100 hover:border-purple-300 cursor-pointer transition-all">
+                                    <p class="text-sm text-gray-800">End with a question to boost engagement</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hashtag Suggestions -->
+                        <div id="hashtag-suggestions" class="bg-gray-50 rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="text-sm font-medium text-gray-700">Suggested Hashtags</h4>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-xs text-gray-500 hover:text-gray-700">Select All</button>
+                                    <button class="text-xs text-gray-500 hover:text-gray-700">Clear</button>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="hashtag-suggestion px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-200 border-2 border-blue-200">#BehindTheScenes</span>
+                                <span class="hashtag-suggestion px-3 py-1 bg-gray-200 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700 border-2 border-transparent hover:border-blue-200">#CreativeProcess</span>
+                                <span class="hashtag-suggestion px-3 py-1 bg-gray-200 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700 border-2 border-transparent hover:border-blue-200">#TeamWork</span>
+                                <span class="hashtag-suggestion px-3 py-1 bg-gray-200 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700 border-2 border-transparent hover:border-blue-200">#Innovation</span>
+                                <span class="hashtag-suggestion px-3 py-1 bg-gray-200 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700 border-2 border-transparent hover:border-blue-200">#ProductDevelopment</span>
+                                <span class="hashtag-suggestion px-3 py-1 bg-gray-200 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700 border-2 border-transparent hover:border-blue-200">#StartupLife</span>
+                                <span class="hashtag-suggestion px-3 py-1 bg-gray-200 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700 border-2 border-transparent hover:border-blue-200">#WorkInProgress</span>
+                                <span class="hashtag-suggestion px-3 py-1 bg-gray-200 text-gray-600 text-sm rounded-full cursor-pointer transition-all hover:bg-blue-100 hover:text-blue-700 border-2 border-transparent hover:border-blue-200">#BusinessGrowth</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Platform Specific Adaptations -->
+                        <div id="platform-adaptations" class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                            <h4 class="text-sm font-medium text-blue-900 mb-3 flex items-center">
+                                <i class="fa-brands fa-instagram mr-2 text-pink-500"></i>
+                                Instagram Optimization
+                            </h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check-circle text-green-500 text-sm"></i>
+                                    <span class="text-sm text-blue-800">Line breaks added</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check-circle text-green-500 text-sm"></i>
+                                    <span class="text-sm text-blue-800">Emojis optimized</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check-circle text-green-500 text-sm"></i>
+                                    <span class="text-sm text-blue-800">CTA included</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-check-circle text-green-500 text-sm"></i>
+                                    <span class="text-sm text-blue-800">Character limit OK</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Preview & Analytics -->
+            <div id="right-panel" class="w-80 bg-white shadow-lg border-l border-gray-200 h-[calc(100vh-140px)] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Preview & Score</h3>
+                        <button class="text-gray-400 hover:text-gray-600 transition-all">
+                            <i class="fa-solid fa-expand text-lg"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Platform Preview Tabs -->
+                    <div id="preview-tabs" class="flex space-x-1 bg-gray-100 p-1 rounded-lg mb-6">
+                        <button class="preview-tab flex-1 px-3 py-2 text-xs font-medium bg-white text-gray-900 rounded-md shadow-sm transition-all" data-platform="instagram">
+                            <i class="fa-brands fa-instagram mr-1"></i>IG
+                        </button>
+                        <button class="preview-tab flex-1 px-3 py-2 text-xs font-medium text-gray-600 hover:text-gray-900 transition-all" data-platform="tiktok">
+                            <i class="fa-brands fa-tiktok mr-1"></i>TT
+                        </button>
+                        <button class="preview-tab flex-1 px-3 py-2 text-xs font-medium text-gray-600 hover:text-gray-900 transition-all" data-platform="youtube">
+                            <i class="fa-brands fa-youtube mr-1"></i>YT
+                        </button>
+                        <button class="preview-tab flex-1 px-3 py-2 text-xs font-medium text-gray-600 hover:text-gray-900 transition-all" data-platform="facebook">
+                            <i class="fa-brands fa-facebook mr-1"></i>FB
+                        </button>
+                    </div>
+                    
+                    <!-- Mobile Preview -->
+                    <div id="mobile-preview" class="bg-gray-900 rounded-2xl p-4 mb-6">
+                        <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+                            <!-- Post Header -->
+                            <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Profile" class="w-8 h-8 rounded-full">
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900">mybrand</p>
+                                        <p class="text-xs text-gray-500">2 hours ago</p>
+                                    </div>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Post Image Placeholder -->
+                            <div class="aspect-square bg-gradient-to-br from-purple-400 via-pink-400 to-orange-400 flex items-center justify-center relative">
+                                <div class="text-center text-white">
+                                    <i class="fa-solid fa-image text-4xl mb-2 opacity-60"></i>
+                                    <p class="text-xs opacity-80">AI-generated image will appear here</p>
+                                </div>
+                                <div class="absolute top-3 right-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
+                                    1/1
+                                </div>
+                            </div>
+                            
+                            <!-- Post Actions -->
+                            <div class="p-3">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-4">
+                                        <i class="fa-regular fa-heart text-xl hover:text-red-500 cursor-pointer transition-colors"></i>
+                                        <i class="fa-regular fa-comment text-xl hover:text-gray-600 cursor-pointer transition-colors"></i>
+                                        <i class="fa-regular fa-paper-plane text-xl hover:text-gray-600 cursor-pointer transition-colors"></i>
+                                    </div>
+                                    <i class="fa-regular fa-bookmark text-xl hover:text-gray-600 cursor-pointer transition-colors"></i>
+                                </div>
+                                
+                                <p class="text-sm font-semibold mb-2 text-gray-900">247 likes</p>
+                                
+                                <div class="text-sm text-gray-900">
+                                    <span class="font-semibold">mybrand</span>
+                                    <span class="ml-1">🎬 Behind the scenes magic! ✨ Ever wondered how we bring our ideas to life?...</span>
+                                    <button class="text-gray-500 ml-1 hover:text-gray-700">more</button>
+                                </div>
+                                
+                                <div class="mt-2">
+                                    <button class="text-gray-500 text-sm hover:text-gray-700">View all 12 comments</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Engagement Score Card -->
+                    <div id="engagement-score" class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 mb-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-sm font-medium text-green-900 flex items-center">
+                                <i class="fa-solid fa-chart-line text-green-600 mr-2"></i>
+                                Engagement Score
+                            </h4>
+                            <div class="flex items-center space-x-2">
+                                <div class="text-3xl font-bold text-green-600">87</div>
+                                <div class="text-sm text-green-600 font-medium">/100</div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-green-800">Hook Strength</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 h-2 bg-green-200 rounded-full overflow-hidden">
+                                        <div class="w-14 h-2 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-xs text-green-600 font-medium">9/10</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-green-800">Clarity</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 h-2 bg-green-200 rounded-full overflow-hidden">
+                                        <div class="w-12 h-2 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-xs text-green-600 font-medium">8/10</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-green-800">CTA Power</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 h-2 bg-green-200 rounded-full overflow-hidden">
+                                        <div class="w-14 h-2 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-xs text-green-600 font-medium">9/10</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-green-800">Platform Fit</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 h-2 bg-green-200 rounded-full overflow-hidden">
+                                        <div class="w-13 h-2 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-xs text-green-600 font-medium">8/10</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-green-800">Brand Voice</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-16 h-2 bg-green-200 rounded-full overflow-hidden">
+                                        <div class="w-15 h-2 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-xs text-green-600 font-medium">9/10</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recommendations -->
+                        <div class="mt-4 p-3 bg-white rounded-lg border border-green-100">
+                            <h5 class="text-sm font-medium text-gray-900 mb-2 flex items-center">
+                                <i class="fa-solid fa-lightbulb text-yellow-500 mr-1"></i>
+                                Top Recommendations
+                            </h5>
+                            <ul class="text-xs text-gray-600 space-y-1">
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-check text-green-500 text-xs mt-0.5"></i>
+                                    <span>Strong opening hook captures attention effectively</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-arrow-up text-blue-500 text-xs mt-0.5"></i>
+                                    <span>Consider adding more specific details about the process</span>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <i class="fa-solid fa-check text-green-500 text-xs mt-0.5"></i>
+                                    <span>Question at the end drives engagement well</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Analysis -->
+                    <div id="content-analysis" class="space-y-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-blue-900 flex items-center">
+                                    <i class="fa-solid fa-graduation-cap text-blue-600 mr-2"></i>
+                                    Readability
+                                </h4>
+                                <span class="text-sm font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded-full">Grade 8</span>
+                            </div>
+                            <p class="text-xs text-blue-700">Perfect for most social media audiences</p>
+                        </div>
+                        
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-green-900 flex items-center">
+                                    <i class="fa-solid fa-shield-check text-green-600 mr-2"></i>
+                                    Brand Safety
+                                </h4>
+                                <i class="fa-solid fa-check-circle text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-green-700">Content passes all safety checks</p>
+                        </div>
+                        
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-purple-900 flex items-center">
+                                    <i class="fa-solid fa-hashtag text-purple-600 mr-2"></i>
+                                    Hashtag Mix
+                                </h4>
+                                <span class="text-sm font-semibold text-purple-600 bg-purple-100 px-2 py-1 rounded-full">5 tags</span>
+                            </div>
+                            <p class="text-xs text-purple-700">Good balance of niche and broad hashtags</p>
+                        </div>
+                        
+                        <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-orange-900 flex items-center">
+                                    <i class="fa-solid fa-clock text-orange-600 mr-2"></i>
+                                    Best Time
+                                </h4>
+                                <span class="text-sm font-semibold text-orange-600">3:00 PM</span>
+                            </div>
+                            <p class="text-xs text-orange-700">Optimal posting time for your audience</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div id="action-bar" class="fixed bottom-0 left-64 right-0 bg-white border-t border-gray-200 shadow-lg p-4 z-30">
+            <div class="flex items-center justify-center space-x-4">
+                <button class="bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-xl font-semibold hover:from-indigo-600 hover:to-purple-600 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Generate Content
+                </button>
+                <button class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-medium hover:bg-gray-200 transition-all">
+                    <i class="fa-solid fa-refresh mr-2"></i>Regenerate
+                </button>
+                <button class="bg-purple-100 text-purple-700 px-6 py-3 rounded-xl font-medium hover:bg-purple-200 transition-all">
+                    <i class="fa-solid fa-copy mr-2"></i>3 Variants
+                </button>
+                <button class="bg-yellow-100 text-yellow-700 px-6 py-3 rounded-xl font-medium hover:bg-yellow-200 transition-all">
+                    <i class="fa-solid fa-bookmark mr-2"></i>Save Template
+                </button>
+                <div class="w-px h-8 bg-gray-300"></div>
+                <button class="bg-green-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-green-700 transition-all shadow-md hover:shadow-lg">
+                    <i class="fa-solid fa-paper-plane mr-2"></i>Post Now
+                </button>
+                <button class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg">
+                    <i class="fa-solid fa-clock mr-2"></i>Schedule
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mode switching functionality
+        const modeButtons = document.querySelectorAll('#caption-mode, #image-mode, #video-mode');
+        modeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                modeButtons.forEach(btn => {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('text-gray-600', 'hover:text-gray-900');
+                });
+                this.classList.add('bg-primary', 'text-white');
+                this.classList.remove('text-gray-600', 'hover:text-gray-900');
+            });
+        });
+
+        // Platform selection functionality
+        const platformButtons = document.querySelectorAll('.platform-btn');
+        platformButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const isActive = !this.classList.contains('bg-gray-200');
+                
+                if (isActive) {
+                    // Deactivate - make it gray
+                    this.classList.add('bg-gray-200', 'text-gray-400');
+                    this.classList.remove('bg-pink-500', 'bg-blue-600', 'bg-blue-400', 'bg-red-600', 'bg-black', 'text-white');
+                } else {
+                    // Activate - restore original color
+                    const platform = this.dataset.platform;
+                    this.classList.remove('bg-gray-200', 'text-gray-400');
+                    this.classList.add('text-white');
+                    
+                    switch(platform) {
+                        case 'instagram':
+                            this.classList.add('bg-pink-500');
+                            break;
+                        case 'facebook':
+                            this.classList.add('bg-blue-600');
+                            break;
+                        case 'twitter':
+                            this.classList.add('bg-blue-400');
+                            break;
+                        case 'youtube':
+                            this.classList.add('bg-red-600');
+                            break;
+                        case 'tiktok':
+                            this.classList.add('bg-black');
+                            break;
+                    }
+                }
+            });
+        });
+
+        // Goal preset selection
+        const goalButtons = document.querySelectorAll('.goal-btn');
+        goalButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                goalButtons.forEach(btn => {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+                });
+                this.classList.add('bg-primary', 'text-white');
+                this.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+            });
+        });
+
+        // Hashtag style selection
+        const hashtagButtons = document.querySelectorAll('.hashtag-btn');
+        hashtagButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                hashtagButtons.forEach(btn => {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+                });
+                this.classList.add('bg-primary', 'text-white');
+                this.classList.remove('bg-gray-100', 'text-gray-600', 'hover:bg-gray-200');
+            });
+        });
+
+        // Character count functionality
+        const textarea = document.getElementById('main-textarea');
+        const charCount = document.getElementById('char-count');
+        
+        function updateCharCount() {
+            charCount.textContent = textarea.value.length;
+        }
+        
+        textarea.addEventListener('input', updateCharCount);
+        updateCharCount();
+
+        // Hashtag suggestion clicks
+        const hashtagSuggestions = document.querySelectorAll('.hashtag-suggestion');
+        hashtagSuggestions.forEach(hashtag => {
+            hashtag.addEventListener('click', function() {
+                if (this.classList.contains('bg-blue-100')) {
+                    this.classList.remove('bg-blue-100', 'text-blue-700', 'border-blue-200');
+                    this.classList.add('bg-gray-200', 'text-gray-600', 'border-transparent');
+                } else {
+                    this.classList.add('bg-blue-100', 'text-blue-700', 'border-blue-200');
+                    this.classList.remove('bg-gray-200', 'text-gray-600', 'border-transparent');
+                }
+            });
+        });
+
+        // Preview tab switching
+        const previewTabs = document.querySelectorAll('.preview-tab');
+        previewTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                previewTabs.forEach(t => {
+                    t.classList.remove('bg-white', 'text-gray-900', 'shadow-sm');
+                    t.classList.add('text-gray-600', 'hover:text-gray-900');
+                });
+                this.classList.add('bg-white', 'text-gray-900', 'shadow-sm');
+                this.classList.remove('text-gray-600', 'hover:text-gray-900');
+            });
+        });
+
+        // Audience chip selection
+        const audienceChips = document.querySelectorAll('.audience-chip');
+        audienceChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                if (this.classList.contains('bg-blue-100')) {
+                    this.classList.remove('bg-blue-100', 'text-blue-700');
+                    this.classList.add('bg-gray-100', 'text-gray-600');
+                } else {
+                    this.classList.add('bg-blue-100', 'text-blue-700');
+                    this.classList.remove('bg-gray-100', 'text-gray-600');
+                }
+            });
+        });
+
+        // Advanced settings toggle
+        const advancedToggle = document.getElementById('advanced-toggle');
+        const advancedContent = document.getElementById('advanced-content');
+        const chevron = advancedToggle.querySelector('i');
+
+        advancedToggle.addEventListener('click', function() {
+            if (advancedContent.classList.contains('hidden')) {
+                advancedContent.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                advancedContent.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        });
+
+        // Length slider update
+        const lengthSlider = document.getElementById('length-slider');
+        const lengthLabels = lengthSlider.parentElement.querySelectorAll('span');
+
+        lengthSlider.addEventListener('input', function() {
+            const value = this.value;
+            lengthLabels.forEach((label, index) => {
+                if (index + 1 == value) {
+                    label.classList.add('font-medium', 'text-primary');
+                    label.classList.remove('text-gray-500');
+                } else {
+                    label.classList.remove('font-medium', 'text-primary');
+                    label.classList.add('text-gray-500');
+                }
+            });
+        });
+
+        // AI suggestions interaction
+        const aiSuggestions = document.querySelectorAll('#ai-suggestions .bg-white');
+        aiSuggestions.forEach(suggestion => {
+            suggestion.addEventListener('click', function() {
+                // Add a brief animation to show it was applied
+                this.classList.add('bg-green-100', 'border-green-300');
+                setTimeout(() => {
+                    this.classList.remove('bg-green-100', 'border-green-300');
+                    this.classList.add('bg-gray-100', 'border-gray-200');
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>
