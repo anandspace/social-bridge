@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Inbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Message Detail Modal -->
+    <div id="message-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-instagram text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900">Conversation with @fashionista</h3>
+                                <p class="text-gray-600">Instagram Direct Message</p>
+                            </div>
+                        </div>
+                        <button onclick="closeMessageDetailModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex h-[600px]">
+                    <div class="flex-1 flex flex-col">
+                        <div class="flex-1 p-6 overflow-y-auto bg-gray-50">
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="User" class="w-8 h-8 rounded-full">
+                                    <div class="bg-white p-3 rounded-2xl rounded-tl-md shadow-sm max-w-xs">
+                                        <p class="text-sm">Hi! I love your latest post about sustainable fashion. Where did you get that amazing dress?</p>
+                                        <p class="text-xs text-gray-500 mt-2">2 hours ago</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3 justify-end">
+                                    <div class="bg-primary text-white p-3 rounded-2xl rounded-tr-md max-w-xs">
+                                        <p class="text-sm">Thank you so much! It's from @sustainablestyle - they have amazing eco-friendly pieces. Use code BRAND20 for 20% off!</p>
+                                        <p class="text-xs text-indigo-200 mt-2">1 hour ago</p>
+                                    </div>
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="You" class="w-8 h-8 rounded-full">
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="User" class="w-8 h-8 rounded-full">
+                                    <div class="bg-white p-3 rounded-2xl rounded-tl-md shadow-sm max-w-xs">
+                                        <p class="text-sm">Perfect! Just ordered one. Can you share more sustainable brands you recommend?</p>
+                                        <p class="text-xs text-gray-500 mt-2">45 minutes ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 border-t border-gray-200">
+                            <div class="flex space-x-2">
+                                <input type="text" placeholder="Type your reply..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                                <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center space-x-4 mt-3">
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                </button>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fa-solid fa-face-smile"></i>
+                                </button>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fa-solid fa-image"></i>
+                                </button>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fa-solid fa-microphone"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-80 bg-gray-50 border-l border-gray-200 p-4">
+                        <h4 class="font-medium text-gray-900 mb-4">Contact Information</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="Contact" class="w-12 h-12 rounded-full">
+                                <div>
+                                    <p class="font-medium text-gray-900">@fashionista</p>
+                                    <p class="text-sm text-gray-500">Fashion Enthusiast</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg">
+                                <h5 class="font-medium text-gray-900 mb-2">Profile Stats</h5>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span>Followers</span>
+                                        <span class="font-medium">12.5K</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Following</span>
+                                        <span class="font-medium">890</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Posts</span>
+                                        <span class="font-medium">234</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white p-3 rounded-lg">
+                                <h5 class="font-medium text-gray-900 mb-2">Previous Interactions</h5>
+                                <div class="space-y-2">
+                                    <div class="text-sm">
+                                        <p class="text-gray-600">Liked 3 posts this week</p>
+                                        <p class="text-xs text-gray-500">Most recent: 2 days ago</p>
+                                    </div>
+                                    <div class="text-sm">
+                                        <p class="text-gray-600">Shared your story</p>
+                                        <p class="text-xs text-gray-500">1 week ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button class="flex-1 bg-primary text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-indigo-700">
+                                    View Profile
+                                </button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">
+                                    <i class="fa-solid fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compose Message Modal -->
+    <div id="compose-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-semibold text-gray-900">Compose Message</h3>
+                        <button onclick="closeComposeModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Platform</label>
+                        <select class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            <option>Instagram</option>
+                            <option>Facebook</option>
+                            <option>Twitter</option>
+                            <option>LinkedIn</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                        <input type="text" placeholder="Search contacts or enter username..." class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                        <textarea rows="6" placeholder="Type your message..." class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary resize-none"></textarea>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-paperclip mr-1"></i>Attach
+                        </button>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-image mr-1"></i>Image
+                        </button>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-face-smile mr-1"></i>Emoji
+                        </button>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-4">
+                        <button class="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-medium hover:bg-indigo-700">
+                            Send Message
+                        </button>
+                        <button onclick="closeComposeModal()" class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 z-40">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-share-nodes text-white text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900">SocialHub</h1>
+            </div>
+        </div>
+        
+        <nav class="p-4 space-y-2">
+            <a href="index.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-line"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="createPost.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span class="font-medium">Create Post</span>
+            </a>
+            <a href="schedule.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-calendar"></i>
+                <span class="font-medium">Schedule</span>
+            </a>
+            <a href="analytics.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span class="font-medium">Analytics</span>
+            </a>
+            <a href="inbox.html" class="flex items-center space-x-3 px-4 py-3 bg-primary text-white rounded-lg">
+                <i class="fa-solid fa-inbox"></i>
+                <span class="font-medium">Inbox</span>
+                <span class="ml-auto bg-white text-primary text-xs px-2 py-1 rounded-full">12</span>
+            </a>
+            <a href="studio.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span class="font-medium">AI Studio</span>
+            </a>
+            <a href="accounts.ts" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-link"></i>
+                <span class="font-medium">Accounts</span>
+            </a>
+        </nav>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+            <div class="flex items-center space-x-3">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Profile" class="w-10 h-10 rounded-full">
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Sarah Wilson</p>
+                    <p class="text-xs text-gray-500">Pro Plan</p>
+                </div>
+                <i class="fa-solid fa-cog text-gray-400 cursor-pointer hover:text-gray-600"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="ml-64">
+        <!-- Header -->
+        <header id="header" class="bg-white shadow-sm border-b border-gray-200 px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900">Unified Inbox</h2>
+                    <p class="text-gray-600 mt-1">Manage all your social media messages in one place</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-gray-900 px-4 py-2 border border-gray-300 rounded-lg font-medium">
+                        <i class="fa-solid fa-filter mr-2"></i>Filters
+                    </button>
+                    <button onclick="openComposeModal()" class="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                        <i class="fa-solid fa-plus mr-2"></i>Compose
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Inbox Stats -->
+        <div id="inbox-stats" class="p-8 pb-0">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-inbox text-blue-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-900">47</p>
+                            <p class="text-sm text-gray-600">Total Messages</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-clock text-orange-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-900">12</p>
+                            <p class="text-sm text-gray-600">Unread</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-reply text-green-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-900">24</p>
+                            <p class="text-sm text-gray-600">Replied Today</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-star text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-900">8</p>
+                            <p class="text-sm text-gray-600">Starred</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div id="search-filters" class="px-8 pb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Search messages..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-80 focus:ring-2 focus:ring-primary focus:border-primary">
+                    </div>
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 bg-white">
+                        <option value="">All Platforms</option>
+                        <option value="instagram">Instagram</option>
+                        <option value="facebook">Facebook</option>
+                        <option value="twitter">Twitter</option>
+                        <option value="linkedin">LinkedIn</option>
+                    </select>
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 bg-white">
+                        <option value="">All Status</option>
+                        <option value="unread">Unread</option>
+                        <option value="starred">Starred</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="p-2 text-gray-400 hover:text-gray-600 border border-gray-300 rounded-lg">
+                        <i class="fa-solid fa-arrow-up-short-wide"></i>
+                    </button>
+                    <button class="p-2 text-gray-600 bg-gray-100 border border-gray-300 rounded-lg">
+                        <i class="fa-solid fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inbox Layout -->
+        <div id="inbox-layout" class="px-8 pb-8">
+            <div class="flex bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" style="height: 700px;">
+                <!-- Message List -->
+                <div class="w-1/3 border-r border-gray-200 flex flex-col">
+                    <div class="p-4 border-b border-gray-200 bg-gray-50">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-gray-900">Messages</h3>
+                            <span class="text-sm text-gray-500">47 total</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto">
+                        <!-- Message Item -->
+                        <div class="message-item p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer bg-blue-50 border-l-4 border-l-primary" onclick="selectMessage(this)">
+                            <div class="flex items-start space-x-3">
+                                <div class="relative">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="User" class="w-10 h-10 rounded-full">
+                                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center">
+                                        <i class="fa-brands fa-instagram text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="font-medium text-gray-900 truncate">@fashionista</p>
+                                        <div class="flex items-center space-x-1">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                            <span class="text-xs text-gray-500">2h</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 truncate">Perfect! Just ordered one. Can you share more sustainable brands...</p>
+                                    <div class="flex items-center space-x-2 mt-2">
+                                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Instagram</span>
+                                        <i class="fa-solid fa-star text-yellow-500 text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="message-item p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="selectMessage(this)">
+                            <div class="flex items-start space-x-3">
+                                <div class="relative">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="User" class="w-10 h-10 rounded-full">
+                                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-600 rounded-full flex items-center justify-center">
+                                        <i class="fa-brands fa-facebook text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="font-medium text-gray-900 truncate">John Marketing</p>
+                                        <div class="flex items-center space-x-1">
+                                            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                            <span class="text-xs text-gray-500">3h</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 truncate">Hi! I'm interested in collaborating with your brand. Do you have...</p>
+                                    <div class="flex items-center space-x-2 mt-2">
+                                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Facebook</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="message-item p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="selectMessage(this)">
+                            <div class="flex items-start space-x-3">
+                                <div class="relative">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg" alt="User" class="w-10 h-10 rounded-full">
+                                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-400 rounded-full flex items-center justify-center">
+                                        <i class="fa-brands fa-twitter text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="font-medium text-gray-900 truncate">@techguru</p>
+                                        <span class="text-xs text-gray-500">5h</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 truncate">Thanks for the quick response! Your customer service is amazing.</p>
+                                    <div class="flex items-center space-x-2 mt-2">
+                                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Twitter</span>
+                                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Resolved</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="message-item p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="selectMessage(this)">
+                            <div class="flex items-start space-x-3">
+                                <div class="relative">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-6.jpg" alt="User" class="w-10 h-10 rounded-full">
+                                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-blue-700 rounded-full flex items-center justify-center">
+                                        <i class="fa-brands fa-linkedin text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="font-medium text-gray-900 truncate">Emma Professional</p>
+                                        <span class="text-xs text-gray-500">1d</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 truncate">Would love to connect and discuss potential partnerships...</p>
+                                    <div class="flex items-center space-x-2 mt-2">
+                                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">LinkedIn</span>
+                                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Follow-up</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="message-item p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="selectMessage(this)">
+                            <div class="flex items-start space-x-3">
+                                <div class="relative">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="User" class="w-10 h-10 rounded-full">
+                                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center">
+                                        <i class="fa-brands fa-instagram text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="font-medium text-gray-900 truncate">@creativestudio</p>
+                                        <span class="text-xs text-gray-500">1d</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 truncate">Love your content! Can we feature you in our upcoming campaign?</p>
+                                    <div class="flex items-center space-x-2 mt-2">
+                                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Instagram</span>
+                                        <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Opportunity</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="message-item p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer" onclick="selectMessage(this)">
+                            <div class="flex items-start space-x-3">
+                                <div class="relative">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="User" class="w-10 h-10 rounded-full">
+                                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-black rounded-full flex items-center justify-center">
+                                        <i class="fa-brands fa-tiktok text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="font-medium text-gray-900 truncate">@trendsetter</p>
+                                        <span class="text-xs text-gray-500">2d</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 truncate">Your latest TikTok was fire! What editing app do you use?</p>
+                                    <div class="flex items-center space-x-2 mt-2">
+                                        <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">TikTok</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message Detail -->
+                <div class="flex-1 flex flex-col">
+                    <div class="p-6 border-b border-gray-200 bg-gray-50">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="relative">
+                                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="User" class="w-12 h-12 rounded-full">
+                                    <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center">
+                                        <i class="fa-brands fa-instagram text-white text-sm"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900">@fashionista</h3>
+                                    <p class="text-sm text-gray-500">Instagram • Active 1h ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="openMessageDetailModal()" class="text-gray-400 hover:text-gray-600 p-2">
+                                    <i class="fa-solid fa-expand"></i>
+                                </button>
+                                <button class="text-gray-400 hover:text-gray-600 p-2">
+                                    <i class="fa-solid fa-star"></i>
+                                </button>
+                                <button class="text-gray-400 hover:text-gray-600 p-2">
+                                    <i class="fa-solid fa-archive"></i>
+                                </button>
+                                <button class="text-gray-400 hover:text-gray-600 p-2">
+                                    <i class="fa-solid fa-ellipsis-h"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 p-6 overflow-y-auto">
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3">
+                                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="User" class="w-8 h-8 rounded-full">
+                                <div class="bg-gray-100 p-4 rounded-2xl rounded-tl-md max-w-xs">
+                                    <p class="text-sm">Hi! I love your latest post about sustainable fashion. Where did you get that amazing dress?</p>
+                                    <p class="text-xs text-gray-500 mt-2">Yesterday at 2:30 PM</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 justify-end">
+                                <div class="bg-primary text-white p-4 rounded-2xl rounded-tr-md max-w-xs">
+                                    <p class="text-sm">Thank you so much! It's from @sustainablestyle - they have amazing eco-friendly pieces. Use code BRAND20 for 20% off!</p>
+                                    <p class="text-xs text-indigo-200 mt-2">Yesterday at 3:15 PM</p>
+                                </div>
+                                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="You" class="w-8 h-8 rounded-full">
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="User" class="w-8 h-8 rounded-full">
+                                <div class="bg-gray-100 p-4 rounded-2xl rounded-tl-md max-w-xs">
+                                    <p class="text-sm">Perfect! Just ordered one. Can you share more sustainable brands you recommend?</p>
+                                    <p class="text-xs text-gray-500 mt-2">2 hours ago</p>
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 border-t border-gray-200">
+                        <div class="flex space-x-3">
+                            <input type="text" placeholder="Type your reply..." class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                            <button class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-indigo-700 font-medium">
+                                Send
+                            </button>
+                        </div>
+                        <div class="flex items-center space-x-4 mt-3">
+                            <button class="text-gray-400 hover:text-gray-600 text-sm">
+                                <i class="fa-solid fa-paperclip mr-1"></i>Attach
+                            </button>
+                            <button class="text-gray-400 hover:text-gray-600 text-sm">
+                                <i class="fa-solid fa-image mr-1"></i>Image
+                            </button>
+                            <button class="text-gray-400 hover:text-gray-600 text-sm">
+                                <i class="fa-solid fa-face-smile mr-1"></i>Emoji
+                            </button>
+                            <button class="text-gray-400 hover:text-gray-600 text-sm">
+                                <i class="fa-solid fa-microphone mr-1"></i>Voice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div id="quick-actions" class="px-8 pb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h3 class="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-primary hover:bg-opacity-5 transition-all">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-reply-all text-blue-600 text-xl"></i>
+                        </div>
+                        <span class="font-medium text-gray-900">Bulk Reply</span>
+                        <span class="text-xs text-gray-500 mt-1">Reply to multiple messages</span>
+                    </button>
+                    
+                    <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-primary hover:bg-opacity-5 transition-all">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-tags text-green-600 text-xl"></i>
+                        </div>
+                        <span class="font-medium text-gray-900">Auto-Tag</span>
+                        <span class="text-xs text-gray-500 mt-1">Organize with smart tags</span>
+                    </button>
+                    
+                    <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-primary hover:bg-opacity-5 transition-all">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-robot text-purple-600 text-xl"></i>
+                        </div>
+                        <span class="font-medium text-gray-900">AI Responses</span>
+                        <span class="text-xs text-gray-500 mt-1">Generate smart replies</span>
+                    </button>
+                    
+                    <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-primary hover:bg-opacity-5 transition-all">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-archive text-orange-600 text-xl"></i>
+                        </div>
+                        <span class="font-medium text-gray-900">Archive Old</span>
+                        <span class="text-xs text-gray-500 mt-1">Clean up resolved chats</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Templates -->
+        <div id="response-templates" class="px-8 pb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-semibold text-gray-900">Quick Response Templates</h3>
+                    <button class="text-primary hover:text-indigo-700 font-medium text-sm">
+                        <i class="fa-solid fa-plus mr-1"></i>Add Template
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-gray-50 cursor-pointer">
+                        <h4 class="font-medium text-gray-900 mb-2">Thank You</h4>
+                        <p class="text-sm text-gray-600 mb-3">"Thank you so much for your message! We really appreciate your support and engagement with our content."</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">General</span>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-gray-50 cursor-pointer">
+                        <h4 class="font-medium text-gray-900 mb-2">Product Inquiry</h4>
+                        <p class="text-sm text-gray-600 mb-3">"Hi! Thanks for your interest in our products. You can find more details on our website or DM us for personalized recommendations!"</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Sales</span>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-gray-50 cursor-pointer">
+                        <h4 class="font-medium text-gray-900 mb-2">Collaboration</h4>
+                        <p class="text-sm text-gray-600 mb-3">"Hello! We'd love to explore collaboration opportunities. Please email us at partnerships@brand.com with your proposal."</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Business</span>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div id="recent-activity" class="px-8 pb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h3 class="font-semibold text-gray-900 mb-6">Recent Activity</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-reply text-green-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">Replied to @fashionista on Instagram</p>
+                            <p class="text-xs text-gray-500">2 hours ago</p>
+                        </div>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Completed</span>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-star text-blue-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">Starred message from John Marketing</p>
+                            <p class="text-xs text-gray-500">3 hours ago</p>
+                        </div>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Action</span>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-robot text-purple-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">AI suggested response for @techguru</p>
+                            <p class="text-xs text-gray-500">5 hours ago</p>
+                        </div>
+                        <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">AI</span>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-archive text-orange-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">Archived 5 resolved conversations</p>
+                            <p class="text-xs text-gray-500">1 day ago</p>
+                        </div>
+                        <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">Maintenance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div id="performance-metrics" class="px-8 pb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h3 class="font-semibold text-gray-900 mb-6">Inbox Performance</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div class="text-2xl font-bold text-green-600">92%</div>
+                        </div>
+                        <h4 class="font-medium text-gray-900">Response Rate</h4>
+                        <p class="text-sm text-gray-500">Last 7 days</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div class="text-2xl font-bold text-blue-600">2.3h</div>
+                        </div>
+                        <h4 class="font-medium text-gray-900">Avg Response Time</h4>
+                        <p class="text-sm text-gray-500">15% improvement</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div class="text-2xl font-bold text-purple-600">4.8</div>
+                        </div>
+                        <h4 class="font-medium text-gray-900">Satisfaction Score</h4>
+                        <p class="text-sm text-gray-500">Based on feedback</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectMessage(element) {
+            document.querySelectorAll('.message-item').forEach(item => {
+                item.classList.remove('bg-blue-50', 'border-l-4', 'border-l-primary');
+            });
+            
+            element.classList.add('bg-blue-50', 'border-l-4', 'border-l-primary');
+        }
+
+        function openMessageDetailModal() {
+            document.getElementById('message-detail-modal').classList.remove('hidden');
+        }
+
+        function closeMessageDetailModal() {
+            document.getElementById('message-detail-modal').classList.add('hidden');
+        }
+
+        function openComposeModal() {
+            document.getElementById('compose-modal').classList.remove('hidden');
+        }
+
+        function closeComposeModal() {
+            document.getElementById('compose-modal').classList.add('hidden');
+        }
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(event) {
+            const modals = ['message-detail-modal', 'compose-modal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+
+        // Auto-refresh inbox every 30 seconds
+        setInterval(function() {
+            // In a real app, this would fetch new messages
+            console.log('Checking for new messages...');
+        }, 30000);
+    </script>
+</body>
+</html>
