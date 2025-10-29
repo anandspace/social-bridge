@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        * { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Add Account Modal -->
+    <div id="add-account-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-semibold text-gray-900">Connect Social Account</h3>
+                        <button onclick="closeAddAccountModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Choose a platform to connect your account</p>
+                </div>
+                
+                <div class="p-6 space-y-4">
+                    <button class="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl hover:border-pink-300 hover:bg-pink-50 transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-instagram text-white text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-semibold text-gray-900">Instagram</p>
+                                <p class="text-sm text-gray-500">Connect your Instagram account</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 group-hover:text-pink-500"></i>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-facebook text-white text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-semibold text-gray-900">Facebook</p>
+                                <p class="text-sm text-gray-500">Connect your Facebook page</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 group-hover:text-blue-500"></i>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-blue-400 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-twitter text-white text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-semibold text-gray-900">Twitter</p>
+                                <p class="text-sm text-gray-500">Connect your Twitter account</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 group-hover:text-blue-400"></i>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-blue-700 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-linkedin text-white text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-semibold text-gray-900">LinkedIn</p>
+                                <p class="text-sm text-gray-500">Connect your LinkedIn page</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 group-hover:text-blue-700"></i>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl hover:border-red-300 hover:bg-red-50 transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-youtube text-white text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-semibold text-gray-900">YouTube</p>
+                                <p class="text-sm text-gray-500">Connect your YouTube channel</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 group-hover:text-red-600"></i>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:bg-purple-50 transition-all group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center">
+                                <i class="fa-brands fa-tiktok text-white text-xl"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-semibold text-gray-900">TikTok</p>
+                                <p class="text-sm text-gray-500">Connect your TikTok account</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-400 group-hover:text-purple-600"></i>
+                    </button>
+                </div>
+                
+                <div class="p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                    <div class="flex items-center space-x-2 text-sm text-gray-600">
+                        <i class="fa-solid fa-shield-halved text-green-600"></i>
+                        <span>Your accounts are securely encrypted and protected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg border-r border-gray-200 z-50">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-share-nodes text-white text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900">SocialHub</h1>
+            </div>
+        </div>
+        
+        <nav class="p-4 space-y-2">
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 bg-primary text-white rounded-lg">
+                <i class="fa-solid fa-chart-line"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span class="font-medium">Create Post</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-calendar"></i>
+                <span class="font-medium">Schedule</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span class="font-medium">Analytics</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span class="font-medium">AI Studio</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <i class="fa-solid fa-link"></i>
+                <span class="font-medium">Accounts</span>
+            </a>
+        </nav>
+        
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+            <div class="flex items-center space-x-3">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Profile" class="w-10 h-10 rounded-full">
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-900">Sarah Wilson</p>
+                    <p class="text-xs text-gray-500">Pro Plan</p>
+                </div>
+                <i class="fa-solid fa-cog text-gray-400 cursor-pointer hover:text-gray-600"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="ml-64">
+        <!-- Header -->
+        <header id="header" class="bg-white shadow-sm border-b border-gray-200 px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>
+                    <p class="text-gray-600">Welcome back! Let's get your social media accounts connected.</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="openAddAccountModal()" class="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                        <i class="fa-solid fa-plus mr-2"></i>Connect Account
+                    </button>
+                    <div class="relative">
+                        <i class="fa-solid fa-bell text-gray-400 text-xl cursor-pointer hover:text-gray-600"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Welcome Hero Section -->
+        <div id="welcome-hero" class="px-8 py-12">
+            <div class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 text-white relative overflow-hidden">
+                <div class="absolute inset-0">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-white bg-opacity-10 rounded-full -translate-y-32 translate-x-32"></div>
+                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-white bg-opacity-10 rounded-full translate-y-24 -translate-x-24"></div>
+                </div>
+                
+                <div class="relative z-10 max-w-4xl">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-rocket text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-bold">Welcome to SocialHub!</h1>
+                            <p class="text-white text-opacity-90 text-lg">Let's get you started on your social media management journey</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                                    <i class="fa-solid fa-link text-white"></i>
+                                </div>
+                                <h3 class="font-semibold">Connect Accounts</h3>
+                            </div>
+                            <p class="text-white text-opacity-80 text-sm">Link your social media accounts to start managing all your content from one place</p>
+                        </div>
+                        
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-white"></i>
+                                </div>
+                                <h3 class="font-semibold">AI-Powered Content</h3>
+                            </div>
+                            <p class="text-white text-opacity-80 text-sm">Generate engaging content with our AI tools and get personalized suggestions</p>
+                        </div>
+                        
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                                    <i class="fa-solid fa-chart-line text-white"></i>
+                                </div>
+                                <h3 class="font-semibold">Track Performance</h3>
+                            </div>
+                            <p class="text-white text-opacity-80 text-sm">Monitor your social media performance with detailed analytics and insights</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button onclick="openAddAccountModal()" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                            <i class="fa-solid fa-plus mr-2"></i>Connect Your First Account
+                        </button>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                            <i class="fa-solid fa-play mr-2"></i>Watch Tutorial
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started Steps -->
+        <div id="getting-started" class="px-8 mb-12">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Get Started in 3 Easy Steps</h2>
+                    <p class="text-gray-600">Follow these simple steps to set up your social media management dashboard</p>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="relative mb-6">
+                            <div class="w-20 h-20 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center mx-auto">
+                                <i class="fa-solid fa-link text-white text-2xl"></i>
+                            </div>
+                            <div class="absolute -top-2 -right-2 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Connect Accounts</h3>
+                        <p class="text-gray-600 mb-4">Link your social media accounts to start managing them from one central dashboard</p>
+                        <button onclick="openAddAccountModal()" class="bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-medium hover:bg-indigo-200 transition-colors">
+                            Connect Now
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="relative mb-6">
+                            <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto">
+                                <i class="fa-solid fa-edit text-white text-2xl"></i>
+                            </div>
+                            <div class="absolute -top-2 -right-2 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Create Content</h3>
+                        <p class="text-gray-600 mb-4">Use our AI-powered tools to create engaging posts and schedule them across platforms</p>
+                        <button class="bg-purple-100 text-purple-600 px-4 py-2 rounded-lg font-medium hover:bg-purple-200 transition-colors opacity-50 cursor-not-allowed">
+                            Coming Soon
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="relative mb-6">
+                            <div class="w-20 h-20 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto">
+                                <i class="fa-solid fa-chart-bar text-white text-2xl"></i>
+                            </div>
+                            <div class="absolute -top-2 -right-2 w-8 h-8 bg-pink-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Track Analytics</h3>
+                        <p class="text-gray-600 mb-4">Monitor your performance with detailed analytics and insights to grow your audience</p>
+                        <button class="bg-pink-100 text-pink-600 px-4 py-2 rounded-lg font-medium hover:bg-pink-200 transition-colors opacity-50 cursor-not-allowed">
+                            Coming Soon
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Platforms -->
+        <div id="popular-platforms" class="px-8 mb-12">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">Connect Your Favorite Platforms</h2>
+                    <p class="text-gray-600">Choose from our supported social media platforms to get started</p>
+                </div>
+                
+                <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
+                    <button onclick="openAddAccountModal()" class="group p-6 border-2 border-gray-200 rounded-xl hover:border-pink-300 hover:bg-pink-50 transition-all">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-instagram text-white text-2xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Instagram</h3>
+                            <p class="text-sm text-gray-600">Share photos, stories, and reels</p>
+                            <div class="mt-4 flex items-center space-x-2 text-sm text-gray-500">
+                                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                <span>Most Popular</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="openAddAccountModal()" class="group p-6 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-facebook text-white text-2xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Facebook</h3>
+                            <p class="text-sm text-gray-600">Connect with your community</p>
+                            <div class="mt-4 flex items-center space-x-2 text-sm text-gray-500">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                <span>Business Ready</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="openAddAccountModal()" class="group p-6 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-blue-400 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-twitter text-white text-2xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">Twitter</h3>
+                            <p class="text-sm text-gray-600">Share quick updates and thoughts</p>
+                            <div class="mt-4 flex items-center space-x-2 text-sm text-gray-500">
+                                <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+                                <span>Real-time</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="openAddAccountModal()" class="group p-6 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-blue-700 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-linkedin text-white text-2xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">LinkedIn</h3>
+                            <p class="text-sm text-gray-600">Professional networking</p>
+                            <div class="mt-4 flex items-center space-x-2 text-sm text-gray-500">
+                                <span class="w-2 h-2 bg-blue-700 rounded-full"></span>
+                                <span>Professional</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="openAddAccountModal()" class="group p-6 border-2 border-gray-200 rounded-xl hover:border-red-300 hover:bg-red-50 transition-all">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-red-600 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-youtube text-white text-2xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">YouTube</h3>
+                            <p class="text-sm text-gray-600">Share video content</p>
+                            <div class="mt-4 flex items-center space-x-2 text-sm text-gray-500">
+                                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                                <span>Video First</span>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="openAddAccountModal()" class="group p-6 border-2 border-gray-200 rounded-xl hover:border-purple-300 hover:bg-purple-50 transition-all">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-purple-600 rounded-xl flex items-center justify-center mb-4">
+                                <i class="fa-brands fa-tiktok text-white text-2xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-900 mb-2">TikTok</h3>
+                            <p class="text-sm text-gray-600">Short-form video content</p>
+                            <div class="mt-4 flex items-center space-x-2 text-sm text-gray-500">
+                                <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+                                <span>Trending</span>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Preview -->
+        <div id="features-preview" class="px-8 mb-12">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3">What You'll Get Access To</h2>
+                    <p class="text-gray-600">Powerful features to streamline your social media management</p>
+                </div>
+                
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center p-4">
+                        <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-calendar-plus text-white text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Smart Scheduling</h3>
+                        <p class="text-sm text-gray-600">Schedule posts for optimal engagement times</p>
+                    </div>
+                    
+                    <div class="text-center p-4">
+                        <div class="w-14 h-14 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-wand-magic-sparkles text-white text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">AI Content Generation</h3>
+                        <p class="text-sm text-gray-600">Create engaging content with AI assistance</p>
+                    </div>
+                    
+                    <div class="text-center p-4">
+                        <div class="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-chart-line text-white text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Advanced Analytics</h3>
+                        <p class="text-sm text-gray-600">Track performance across all platforms</p>
+                    </div>
+                    
+                    <div class="text-center p-4">
+                        <div class="w-14 h-14 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-users text-white text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">Team Collaboration</h3>
+                        <p class="text-sm text-gray-600">Work together with your team members</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help and Support -->
+        <div id="help-support" class="px-8 mb-12">
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-book text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Getting Started Guide</h3>
+                            <p class="text-gray-600 mb-4">Learn how to make the most of SocialHub with our comprehensive guide</p>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                                <i class="fa-solid fa-arrow-right mr-2"></i>Read Guide
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-headset text-green-600 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Need Help?</h3>
+                            <p class="text-gray-600 mb-4">Our support team is here to help you get started and answer any questions</p>
+                            <button class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                                <i class="fa-solid fa-comments mr-2"></i>Contact Support
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div id="cta-section" class="px-8 pb-12">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-center text-white">
+                <div class="max-w-2xl mx-auto">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa-solid fa-rocket text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-4">Ready to Transform Your Social Media?</h2>
+                    <p class="text-white text-opacity-90 text-lg mb-8">Connect your first account and start managing all your social media from one powerful dashboard</p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="openAddAccountModal()" class="bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-all">
+                            <i class="fa-solid fa-plus mr-2"></i>Connect Your First Account
+                        </button>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-8 py-3 rounded-lg font-semibold transition-all">
+                            <i class="fa-solid fa-play mr-2"></i>Watch Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openAddAccountModal() {
+            document.getElementById('add-account-modal').classList.remove('hidden');
+        }
+        
+        function closeAddAccountModal() {
+            document.getElementById('add-account-modal').classList.add('hidden');
+        }
+        
+        document.getElementById('add-account-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddAccountModal();
+            }
+        });
+    </script>
+</body>
+</html>
